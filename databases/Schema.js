@@ -1,30 +1,28 @@
-import {ADMIN_SCHEMA, DEBTORS_SCHEMA} from "../AppConfig";
+import { ADMIN_SCHEMA, DEBTORS_SCHEMA } from "../AppConfig";
+import RNFS from 'react-native-fs';
 
 export const AdminSchema = {
   name: ADMIN_SCHEMA,
   properties: {
+    id: 'string',
     name: 'string',
-    primaryKey: 'id',
-    properties: {
-      password: 'string',
-      deb_tors: {type: 'list', objectType: DEBTORS_SCHEMA}
-    }
+    password: 'string',
+    debtors: { type: 'list', objectType: DEBTORS_SCHEMA }
   }
 };
 export const DebtorSchema = {
   name: DEBTORS_SCHEMA,
-  primaryKey: 'id',
   properties: {
-    id: {type: 'string'},
+    id: 'string',
     village: 'string',
-    name: {type: 'string', optional: true},
+    name: 'string',
   }
 };
 
 const Schema = {
-  // path: './realm',
+  path: RNFS.DocumentDirectoryPath  + './data/demo.realm',
   schema: [AdminSchema, DebtorSchema],
-  // schemaVersion: '0'
+  schemaVersion: '0'
 };
 
 

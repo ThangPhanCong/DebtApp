@@ -1,17 +1,47 @@
-import Schema, { AdminSchema, DebtorSchema } from "./Schema";
+import Schema from "./Schema";
 import Realm from "realm";
-import {DEBTORS_SCHEMA} from "../AppConfig";
+import { ADMIN_SCHEMA, DEBTORS_SCHEMA } from "../AppConfig";
 
 function addDebtor(debtor) {
   return new Promise((resolve, reject) => {
-    Realm.open( [AdminSchema, DebtorSchema]).then(realm => {
+    Realm.open({ schema: Schema.schema }).then(realm => {
       realm.write(() => {
-        console.log("real.write")
-        realm.create(DEBTORS_SCHEMA, {name: debtor.name, village: debtor.village, id: debtor.id});
+        const newDebtor = realm.create(DEBTORS_SCHEMA, { name: debtor.name, village: debtor.village, id: debtor.id });
+
+        console.log('newDebtor', newDebtor);
         resolve(debtor);
       })
+
     }).catch((error) => reject(error));
   })
 }
 
-export {addDebtor};
+function newAdmin(admin) {
+  return new Promise((resolve, reject) => {
+    Realm.open({ schema: Schema.schema }).then(realm => {
+      realm.write(() => {
+        const newAdmin = realm.create(ADMIN_SCHEMA, {
+          name: admin.nameAdmin,
+          password: admin.passwordAdmin,
+          id: admin.idAdmin
+        });
+        console.log('newDebtor', newAdmin)
+        resolve(admin);
+      })
+
+    })
+      .catch(err => reject(err))
+  })
+}
+
+function  getListAdmin(table) {
+  return new Promise((resolve, reject) => {
+    Realm.open({ schema: Schema.schema }).then(realm => {
+      const data = realm.objects(table);
+      resolve(data);
+    }).catch(err => reject(err))
+  })
+
+}
+
+export { addDebtor, newAdmin, getListAdmin };
