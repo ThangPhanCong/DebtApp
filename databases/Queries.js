@@ -44,4 +44,6 @@ function  getListAdmin(table) {
 
 }
 
+//comment screen login
+
 export { addDebtor, newAdmin, getListAdmin };
