@@ -84,12 +84,6 @@ export default class App extends React.Component {
         </PopupDialog>
 
 
-        <View>
-          <Text>
-            NhanhCuaHieu
-          </Text>
-        </View>
-
       </View>
     );
   }
