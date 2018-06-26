@@ -1,34 +1,98 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput } from 'react-native';
+import { View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 import ScaledSheet from "../../libs/reactSizeMatter/ScaledSheet";
 import { CommonColors, CommonStyles } from "../../commonStyles/commonStyles";
+import { getListAdmin } from '../../../databases/Queries';
+import DebtInput from "../../common/DebtInput";
 
 class LoginScreen extends Component {
+  static navigationOptions = {
+    header: null
+  };
+
+  state = {
+    paramsLogin: {},
+    listAdmin: []
+  }
+
+  componentDidMount() {
+    this._getListAdmin();
+  }
+
+  async _getListAdmin() {
+    const listAdmin = await getListAdmin('Admin');
+    let parserListAdmin = [];
+
+    for(let i in listAdmin.length) {
+      parserListAdmin.push(listAdmin[i])
+    }
+
+    this.setState({listAdmin: parserListAdmin})
+  }
+
+  _changeParamsLogin(value, title) {
+    const { paramsLogin } = this.state;
+
+    paramsLogin[`${title}`] = value;
+
+    console.log('okmen', paramsLogin)
+    this.setState({ paramsLogin })
+  }
+
+  _onLogin() {
+    const { paramsLogin, listAdmin } = this.state;
+
+    console.log("paramsLogin", paramsLogin)
+    const checkParamsLogin = listAdmin.includes(paramsLogin);
+
+    if(checkParamsLogin) {
+      this.props.navigation.navigate('RegisterScreen')
+    } else {
+      console.log('UserName False')
+    }
+  }
+
   render() {
+    const { navigation } = this.props;
+
     return (
       <View style={styles.screen}>
-
-        <View style={{ flexDirection: 'column' }}>
-          <Text style={styles.titleLogin}>UserName</Text>
-          <TextInput style={styles.textInput}
-                     placeholderTextColor='#cfd0d1'
-                     underlineColorAndroid='transparent'
+        <View>
+          <Image
+            resizeMode={'contain'}
+            style={styles.imgLogo}
+            source={require('../../../assets/logo/logo.png')}
           />
+        </View>
+        <View style={{ flexDirection: 'column' }}>
+          <Text style={styles.titleLogin}>Tên người dùng:</Text>
+          <DebtInput changeParams={(value) => this._changeParamsLogin(value, 'userName')}/>
         </View>
 
         <View style={{ flexDirection: 'column' }}>
-          <Text style={styles.titleLogin}>Password</Text>
-          <TextInput style={styles.textInput}
-            // secureTextEntry={!this.state.showPassword}
-                     placeholderTextColor='#cfd0d1'
-                     underlineColorAndroid='transparent'
+          <Text style={styles.titleLogin}>Mật khẩu:</Text>
+          <DebtInput changeParams={(value) => this._changeParamsLogin(value, 'password')}
+                     keyboardType={'numeric'}
           />
         </View>
 
-        <View style={styles.buttonLoginContainer}>
-          <Text style={styles.buttonLogin}>
-            Login
+        <TouchableWithoutFeedback onPress={() => this._onLogin()}>
+          <View style={styles.buttonLoginContainer}>
+            <Text style={styles.buttonLogin}>
+              Đăng nhập
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
+
+        <View style={styles.viewHaveAccount}>
+          <Text style={styles.isHaveAccount}>
+            Bạn đã có tài khoản chưa?
           </Text>
+          <TouchableWithoutFeedback onPress={() => navigation.navigate('RegisterScreen')}>
+            <View>
+              <Text style={styles.textRegister}>Đăng ký</Text>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
       </View>
     )
@@ -48,11 +112,6 @@ const styles = ScaledSheet.create({
     color: CommonColors.mainText,
     paddingBottom: '10@s'
   },
-  textInput: {
-    backgroundColor: CommonColors.textInput,
-    width: '300@s',
-    color: CommonColors.mainText
-  },
   buttonLoginContainer: {
     backgroundColor: CommonColors.buttonBgSubmit,
     width: '300@s',
@@ -64,5 +123,20 @@ const styles = ScaledSheet.create({
   buttonLogin: {
     fontSize: '14@s',
     color: CommonColors.mainText
+  },
+  imgLogo: {
+    width: '150@s',
+    height: '150@s',
+  },
+  isHaveAccount: {
+    color: CommonColors.mainText
+  },
+  textRegister: {
+    color: CommonColors.buttonBgSubmit,
+    paddingLeft: '10@s'
+  },
+  viewHaveAccount: {
+    flexDirection: 'row',
+    marginTop: '40@s'
   }
 })
