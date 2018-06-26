@@ -5,6 +5,7 @@ import { CommonColors, CommonStyles } from "../../commonStyles/commonStyles";
 import { getListAdmin } from '../../../databases/Queries';
 import DebtInput from "../../common/DebtInput";
 import { saveAccessToken } from '../../utils/AppPreferences';
+import { withNavigationFocus } from 'react-navigation';
 
 class LoginScreen extends Component {
   static navigationOptions = {
@@ -18,6 +19,12 @@ class LoginScreen extends Component {
 
   componentDidMount() {
     this._getListAdmin();
+  }
+
+  componentDidUpdate(prevProps) {
+    if(!prevProps.isFocused && this.props.isFocused) {
+      this._getListAdmin();
+    }
   }
 
   async _getListAdmin() {
@@ -43,6 +50,7 @@ class LoginScreen extends Component {
   async _onLogin() {
     const { paramsLogin, listAdmin } = this.state;
     const findUser = listAdmin.find(item => item.name === paramsLogin.userName && item.password === paramsLogin.password);
+    console.log("findUser", findUser,listAdmin )
 
     if (findUser) {
       await saveAccessToken(findUser.id)
@@ -102,7 +110,7 @@ class LoginScreen extends Component {
   }
 }
 
-export default LoginScreen;
+export default withNavigationFocus(LoginScreen);
 
 
 const styles = ScaledSheet.create({
