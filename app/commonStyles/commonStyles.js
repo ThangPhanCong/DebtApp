@@ -8,6 +8,7 @@ const CommonColors = {
   mainText: '#FFF',
   textInput: '#3e424a',
   buttonBgSubmit: '#0090eb',
+  secondaryText: '#7b808d',
 }
 
 const CommonStyles = {

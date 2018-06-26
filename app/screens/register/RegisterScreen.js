@@ -83,7 +83,7 @@ const styles = ScaledSheet.create({
   screen: {
     ...CommonStyles.screen,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   titleLogin: {
     color: CommonColors.mainText,
@@ -99,7 +99,8 @@ const styles = ScaledSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: '40@s',
-    marginTop: '15@s'
+    marginTop: '15@s',
+    marginBottom: '70@s'
   },
   buttonRegister: {
     fontSize: '14@s',

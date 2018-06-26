@@ -4,6 +4,7 @@ import ScaledSheet from "../../libs/reactSizeMatter/ScaledSheet";
 import { CommonColors, CommonStyles } from "../../commonStyles/commonStyles";
 import { getListAdmin } from '../../../databases/Queries';
 import DebtInput from "../../common/DebtInput";
+import { saveAccessToken } from '../../utils/AppPreferences';
 
 class LoginScreen extends Component {
   static navigationOptions = {
@@ -23,30 +24,29 @@ class LoginScreen extends Component {
     const listAdmin = await getListAdmin('Admin');
     let parserListAdmin = [];
 
-    for(let i in listAdmin.length) {
-      parserListAdmin.push(listAdmin[i])
+    const parseJsonList = JSON.parse(JSON.stringify(listAdmin));
+
+    for (let i = 0; i < Object.keys(parseJsonList).length; i++) {
+      parserListAdmin.push(parseJsonList[i])
     }
 
-    this.setState({listAdmin: parserListAdmin})
+    this.setState({ listAdmin: parserListAdmin })
   }
 
   _changeParamsLogin(value, title) {
     const { paramsLogin } = this.state;
 
     paramsLogin[`${title}`] = value;
-
-    console.log('okmen', paramsLogin)
     this.setState({ paramsLogin })
   }
 
-  _onLogin() {
+  async _onLogin() {
     const { paramsLogin, listAdmin } = this.state;
+    const findUser = listAdmin.find(item => item.name === paramsLogin.userName && item.password === paramsLogin.password);
 
-    console.log("paramsLogin", paramsLogin)
-    const checkParamsLogin = listAdmin.includes(paramsLogin);
-
-    if(checkParamsLogin) {
-      this.props.navigation.navigate('RegisterScreen')
+    if (findUser) {
+      await saveAccessToken(findUser.id)
+      this.props.navigation.navigate('MainScreen')
     } else {
       console.log('UserName False')
     }
@@ -54,6 +54,8 @@ class LoginScreen extends Component {
 
   render() {
     const { navigation } = this.props;
+    const { paramsLogin } = this.state;
+    const isDisabled = !paramsLogin.userName || !paramsLogin.password;
 
     return (
       <View style={styles.screen}>
@@ -76,8 +78,9 @@ class LoginScreen extends Component {
           />
         </View>
 
-        <TouchableWithoutFeedback onPress={() => this._onLogin()}>
-          <View style={styles.buttonLoginContainer}>
+        <TouchableWithoutFeedback onPress={isDisabled ? null : () => this._onLogin()}>
+          <View
+            style={[styles.buttonLoginContainer, isDisabled ? styles.buttonLoginDisabled : styles.buttonLoginEnabled]}>
             <Text style={styles.buttonLogin}>
               Đăng nhập
             </Text>
@@ -113,12 +116,17 @@ const styles = ScaledSheet.create({
     paddingBottom: '10@s'
   },
   buttonLoginContainer: {
-    backgroundColor: CommonColors.buttonBgSubmit,
     width: '300@s',
     alignItems: 'center',
     justifyContent: 'center',
     height: '40@s',
     marginTop: '15@s'
+  },
+  buttonLoginDisabled: {
+    backgroundColor: CommonColors.secondaryText
+  },
+  buttonLoginEnabled: {
+    backgroundColor: CommonColors.buttonBgSubmit,
   },
   buttonLogin: {
     fontSize: '14@s',
