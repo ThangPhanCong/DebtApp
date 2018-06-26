@@ -8,13 +8,9 @@ function saveAccessToken(token) {
 
 async function getAccessToken() {
   const token =  await AsyncStorage.getItem('token_saved');
-
-  console.log("Acccccesss", token)
-  if (token.length) {
-    return true;
-  }
-
-  return false;
+  console.log("Acccccesss", typeof token)
+  
+  return token=='true'? true: false;
 }
 
 function removeAccessToken() {
