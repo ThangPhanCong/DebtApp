@@ -23,7 +23,7 @@ class LoginScreen extends Component {
 
   componentDidUpdate(prevProps) {
     if (!prevProps.isFocused && this.props.isFocused) {
-      this._getUser();
+      this._getUserFromRegister();
       this._getListAdmin();
     }
   }
@@ -60,16 +60,14 @@ class LoginScreen extends Component {
       console.log('UserName False')
     }
   }
-  _getUser() {
-    const { navigation } = this.props;
-    if (navigation.state.params) {
-      this.setState({
-        paramsLogin: {
-          userName: navigation.state.params.userName,
-          password: navigation.state.params.password
-        }
-      })
-    } 
+  _getUserFromRegister() {
+    const { paramsLogin } = this.state;
+    const { params } = this.props.navigation.state;
+    if (params) {
+      paramsLogin.userName = params.userName;
+      paramsLogin.password = params.password;
+      this.setState({ paramsLogin })
+    }
   }
   render() {
     const { navigation } = this.props;
