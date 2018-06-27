@@ -4,11 +4,7 @@ import ScaledSheet from "../libs/reactSizeMatter/ScaledSheet";
 import { CommonColors } from "../commonStyles/commonStyles";
 
 class DebtInput extends Component {
-  componentDidMount() {
-    console.log("dmm hieu", this.props.valueText)
-  }
   render() {
-    console.log("dmm hieu")
     return (
       <TextInput style={styles.textInput}
                  keyboardType={this.props.keyboardType}

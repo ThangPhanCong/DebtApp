@@ -23,6 +23,7 @@ class LoginScreen extends Component {
 
   componentDidUpdate(prevProps) {
     if (!prevProps.isFocused && this.props.isFocused) {
+      this._getUser();
       this._getListAdmin();
     }
   }
@@ -59,23 +60,21 @@ class LoginScreen extends Component {
       console.log('UserName False')
     }
   }
-
+  _getUser() {
+    const { navigation } = this.props;
+    if (navigation.state.params) {
+      this.setState({
+        paramsLogin: {
+          userName: navigation.state.params.userName,
+          password: navigation.state.params.password
+        }
+      })
+    } 
+  }
   render() {
     const { navigation } = this.props;
     const { paramsLogin } = this.state;
     const isDisabled = !paramsLogin.userName || !paramsLogin.password;
-    console.log("Check: " + !paramsLogin.userName)
-    let userName = null
-    let password = null
-    if (navigation.state.params) {
-      userName = navigation.state.params.userName;
-      password = navigation.state.params.password;
-      paramsLogin.userName = userName
-      paramsLogin.password = password
-    } else {
-      userName = null;
-      password = null;
-    }
     return (
       <View style={styles.screen}>
         <View>
@@ -89,7 +88,7 @@ class LoginScreen extends Component {
           <Text style={styles.titleLogin}>Tên người dùng:</Text>
           <DebtInput
             changeParams={(value) => this._changeParamsLogin(value, 'userName')}
-            defaultValue={userName}
+            defaultValue={paramsLogin.userName}
           />
         </View>
 
@@ -97,7 +96,7 @@ class LoginScreen extends Component {
           <Text style={styles.titleLogin}>Mật khẩu:</Text>
           <DebtInput changeParams={(value) => this._changeParamsLogin(value, 'password')}
             keyboardType={'numeric'}
-            defaultValue={password}
+            defaultValue={paramsLogin.password}
           />
         </View>
 
