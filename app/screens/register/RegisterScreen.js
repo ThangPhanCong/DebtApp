@@ -23,14 +23,14 @@ class RegisterScreen extends Component {
 
   async _onRegister() {
     console.log("register");
+    const { paramsRegister } = this.state;
     try {
-      const { paramsRegister } = this.state;
-
       paramsRegister['id'] = uuidv1();
       await newAdmin(paramsRegister);
     } catch (err) {
       console.log("Register._error:", err)
     }
+    this.props.navigation.navigate('LoginScreen', {userName: paramsRegister.userName, password: paramsRegister.password})
   }
 
   _changeParamsRegister(value, title) {

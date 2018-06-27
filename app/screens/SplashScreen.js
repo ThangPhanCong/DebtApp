@@ -1,6 +1,6 @@
-import React, {Component} from "react";
-import {View, Text} from "react-native";
-import {getAccessToken} from "../utils/AppPreferences";
+import React, { Component } from "react";
+import { View, Text } from "react-native";
+import { getAccessToken } from "../utils/AppPreferences";
 
 class SplashScreen extends Component {
   componentWillMount() {
@@ -8,17 +8,17 @@ class SplashScreen extends Component {
   }
 
   async _getAccesToken() {
-    const token =await getAccessToken();
+    const token = await getAccessToken();
 
     console.log("ok men:", token)
-    if(token) {
+    if (token) {
       this.props.navigation.navigate('MainScreen')
     } else {
       this.props.navigation.navigate('LoginScreen')
     }
   }
   render() {
-    return(
+    return (
       <View>
         <Text>Splash</Text>
       </View>

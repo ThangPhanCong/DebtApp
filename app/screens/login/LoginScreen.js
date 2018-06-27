@@ -22,7 +22,7 @@ class LoginScreen extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(!prevProps.isFocused && this.props.isFocused) {
+    if (!prevProps.isFocused && this.props.isFocused) {
       this._getListAdmin();
     }
   }
@@ -50,7 +50,7 @@ class LoginScreen extends Component {
   async _onLogin() {
     const { paramsLogin, listAdmin } = this.state;
     const findUser = listAdmin.find(item => item.name === paramsLogin.userName && item.password === paramsLogin.password);
-    console.log("findUser", findUser,listAdmin )
+    console.log("findUser", findUser, listAdmin)
 
     if (findUser) {
       await saveAccessToken(findUser.id)
@@ -64,7 +64,18 @@ class LoginScreen extends Component {
     const { navigation } = this.props;
     const { paramsLogin } = this.state;
     const isDisabled = !paramsLogin.userName || !paramsLogin.password;
-
+    console.log("Check: " + !paramsLogin.userName)
+    let userName = null
+    let password = null
+    if (navigation.state.params) {
+      userName = navigation.state.params.userName;
+      password = navigation.state.params.password;
+      paramsLogin.userName = userName
+      paramsLogin.password = password
+    } else {
+      userName = null;
+      password = null;
+    }
     return (
       <View style={styles.screen}>
         <View>
@@ -76,13 +87,17 @@ class LoginScreen extends Component {
         </View>
         <View style={{ flexDirection: 'column' }}>
           <Text style={styles.titleLogin}>Tên người dùng:</Text>
-          <DebtInput changeParams={(value) => this._changeParamsLogin(value, 'userName')}/>
+          <DebtInput
+            changeParams={(value) => this._changeParamsLogin(value, 'userName')}
+            defaultValue={userName}
+          />
         </View>
 
         <View style={{ flexDirection: 'column' }}>
           <Text style={styles.titleLogin}>Mật khẩu:</Text>
           <DebtInput changeParams={(value) => this._changeParamsLogin(value, 'password')}
-                     keyboardType={'numeric'}
+            keyboardType={'numeric'}
+            defaultValue={password}
           />
         </View>
 
