@@ -21,9 +21,9 @@ function newAdmin(admin) {
     Realm.open({ schema: Schema.schema }).then(realm => {
       realm.write(() => {
         const newAdmin = realm.create(ADMIN_SCHEMA, {
-          name: admin.nameAdmin,
-          password: admin.passwordAdmin,
-          id: admin.idAdmin
+          name: admin.userName,
+          password: admin.password,
+          id: admin.id
         });
         console.log('newDebtor', newAdmin)
         resolve(admin);
