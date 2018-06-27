@@ -10,7 +10,6 @@ class SplashScreen extends Component {
   async _getAccesToken() {
     const token = await getAccessToken();
 
-    console.log("ok men:", token)
     if (token) {
       this.props.navigation.navigate('MainScreen')
     } else {

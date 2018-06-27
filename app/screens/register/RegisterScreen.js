@@ -37,8 +37,6 @@ class RegisterScreen extends Component {
     const { paramsRegister } = this.state;
 
     paramsRegister[`${title}`] = value;
-
-    console.log('okmen', paramsRegister)
     this.setState({ paramsRegister })
   }
 

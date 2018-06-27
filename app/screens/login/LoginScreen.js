@@ -51,7 +51,6 @@ class LoginScreen extends Component {
   async _onLogin() {
     const { paramsLogin, listAdmin } = this.state;
     const findUser = listAdmin.find(item => item.name === paramsLogin.userName && item.password === paramsLogin.password);
-    console.log("findUser", findUser, listAdmin)
 
     if (findUser) {
       await saveAccessToken(findUser.id)
